@@ -1,2 +1,3 @@
-credentials.js
+credentials.ts
 node_modules
+build
