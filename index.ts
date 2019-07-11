@@ -1,6 +1,6 @@
 import axios from 'axios';
-const authenticate = require('./src/AuthenticationHandler');
-const credentialsHandler = new (require('./src/CredentialHandler'));
+const authenticate = require('./src/lib/AuthenticationHandler');
+const credentialsHandler = new (require('./src/lib/CredentialHandler'));
 const accountOverViewURL = 'https://www.avanza.se/_mobile/account/overview'
 
 credentialsHandler.init()
