@@ -1,16 +1,24 @@
-const axios = require('axios');
-const Stock = require('./src/models/Stock');
+import axios from 'axios';
+const authenticate = require('./src/AuthenticationHandler');
+const accountOverViewURL = 'https://www.avanza.se/_mobile/account/overview'
 
-axios.get('https://www.avanza.se/_mobile/market/stock/5361')
-.then((res: any) => {
-    var data = res.data;
-    var stock = createStockWithData(data);
-    console.log(stock);
-})
-.catch((err: any) => {
-    console.error(err);
-})
+authenticate(require('./credentials').identificationNumber)
+    .then((csid: string) => {
+        if ('' === csid) return
+        console.log('Logged in!');
+    })
+    .catch((err: any) => console.error(err));
 
-function createStockWithData(data: any){
-    return new Stock(data.name, data.marketPlace)
+function getAccountOverview(csid: string): void{
+    axios.get(accountOverViewURL, {
+        headers: {
+            Cookie: 'csid='+csid+';'
+        }
+    })
+        .then((res: any) => {
+            console.log(res.data);
+        })
+        .catch((err: any) => {
+            console.error(err)
+        });
 }
