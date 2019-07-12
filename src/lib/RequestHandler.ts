@@ -1,5 +1,5 @@
 import axios from 'axios';
-class EndpointAdapter{
+class RequestHandler{
     private baseUrl = 'https://www.avanza.se';
     private endPoints = {
         overView: '/_mobile/account/overview',
@@ -17,4 +17,4 @@ class EndpointAdapter{
     }
 }
 
-export { EndpointAdapter };
+export { RequestHandler };
