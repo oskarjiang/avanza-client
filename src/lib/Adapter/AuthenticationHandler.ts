@@ -90,4 +90,4 @@ async function authenticate(identificationNumber: string): Promise<string>{
     }
 }
 
-module.exports = authenticate;
+export { authenticate };

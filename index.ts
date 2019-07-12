@@ -1,8 +1,8 @@
 
-const authenticate = require('./src/lib/AuthenticationHandler');
 const credentialsHandler = new (require('./src/lib/CredentialsHandler'));
-import { EndpointAdapter } from './src/lib/EndpointAdapter'
-import { PositionsDalc } from './src/lib/PositionsDalc'
+import { authenticate } from './src/lib/Adapter/AuthenticationHandler';
+import { RequestHandler } from './src/lib/Adapter/RequestHandler'
+import { PositionsDalc } from './src/data/PositionsDalc'
 
 credentialsHandler.init()
     .then(() => credentialsHandler.getToken()
@@ -23,10 +23,10 @@ credentialsHandler.init()
 
 
 async function main(requestHeader: object){
-    const endpointAdapter = new EndpointAdapter();
+    const requestHandler = new RequestHandler();
     const positionsDalc = PositionsDalc.getInstance();
     
-    const positions = await endpointAdapter.getAccountPositions(requestHeader);
+    const positions = await requestHandler.getAccountPositions(requestHeader);
     positionsDalc.insert(positions.data.instrumentPositions);
 }
 
