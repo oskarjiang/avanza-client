@@ -1,13 +1,14 @@
-import axios from 'axios';
+
 const authenticate = require('./src/lib/AuthenticationHandler');
 const credentialsHandler = new (require('./src/lib/CredentialsHandler'));
-const accountOverViewURL = 'https://www.avanza.se/_mobile/account/overview'
+import { EndpointAdapter } from './src/lib/EndpointAdapter'
+import { PositionsDalc } from './src/lib/PositionsDalc'
 
 credentialsHandler.init()
     .then(() => credentialsHandler.getToken()
         .then((token: string) => {
             console.log('Already logged in!');
-            main(token);
+            main(getRequestHeader(token));
         })
         .catch(() => 
             authenticate(require('./credentials/credentials').identificationNumber)
@@ -15,23 +16,22 @@ credentialsHandler.init()
                     if ('' === token) return
                     console.log('Logged in!');
                     credentialsHandler.setToken(Buffer.from(token, 'utf-8'))
-                    main(token)
+                    main(getRequestHeader(token))
                 })
                 .catch((err: any) => console.error(err))))
 
-function getAccountOverview(csid: string): void{
-        axios.get(accountOverViewURL, {
-            headers: {
-            Cookie: 'csid='+csid+';'
-        }
-    })
-    .then((res: any) => {
-        console.log(res.data);
-    })
-    .catch((err: any) => {
-        console.error(err)
-    });
+
+
+async function main(requestHeader: object){
+    const endpointAdapter = new EndpointAdapter();
+    const positionsDalc = PositionsDalc.getInstance();
+    
+    const positions = await endpointAdapter.getAccountPositions(requestHeader);
+    positionsDalc.insert(positions.data.instrumentPositions);
 }
 
-function main(token: string){
+function getRequestHeader(token: string): object{
+    return {
+        Cookie: 'csid='+token+';'
+    } 
 }
