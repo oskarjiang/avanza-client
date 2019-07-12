@@ -2,7 +2,7 @@
 const credentialsHandler = new (require('./src/lib/CredentialsHandler'));
 import { authenticate } from './src/lib/Adapter/AuthenticationHandler';
 import { RequestHandler } from './src/lib/Adapter/RequestHandler'
-import { PositionsDalc } from './src/lib/PositionsDalc'
+import { PositionsDalc } from './src/data/PositionsDalc'
 
 credentialsHandler.init()
     .then(() => credentialsHandler.getToken()
