@@ -1,7 +1,7 @@
 
-const authenticate = require('./src/lib/AuthenticationHandler');
 const credentialsHandler = new (require('./src/lib/CredentialsHandler'));
-import { RequestHandler } from './src/lib/RequestHandler'
+import { authenticate } from './src/lib/Adapter/AuthenticationHandler';
+import { RequestHandler } from './src/lib/Adapter/RequestHandler'
 import { PositionsDalc } from './src/lib/PositionsDalc'
 
 credentialsHandler.init()
