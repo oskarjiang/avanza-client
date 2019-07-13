@@ -6,7 +6,10 @@ import { PositionsDalc } from './src/data/PositionsDalc'
 import { AuthenticationError } from './src/data/Exceptions';
 var http = require('http');
 
-http.createServer(() => main()).listen(8080);
+http.createServer(() => {
+    console.log("*** New request!")
+    main()
+}).listen(8080);
 async function main(){
     const requestHandler = new RequestHandler();
     const credentialsHandler = new CredentialsHandler();
