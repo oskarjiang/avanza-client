@@ -1,5 +1,6 @@
 import { writeFile, readFile } from 'fs';
 import { generateKeyPair, publicEncrypt, privateDecrypt } from 'crypto';
+import { AuthenticationError, KeypairError } from '../data/Exceptions';
 
 /**
  * Manages credentials that are used for authentication
@@ -31,8 +32,7 @@ class CredentialsHandler{
                             resolve();
                         })
                         .catch(() => {
-                            console.error('Failed to create new one')
-                            reject();
+                            reject(new KeypairError('Failed to create a new keypair'));
                         })
                 });
         })
@@ -44,9 +44,9 @@ class CredentialsHandler{
     private setKeysIfExists(): Promise<void> {
         return new Promise((resolve, reject) =>{
             readFile("credentials/puk", (err, puk) => {
-                if (err) reject(err)
+                if (err) reject(new KeypairError(err.toString()))
                 readFile("credentials/prk", (err, prk) => {
-                    if (err) reject(err)
+                    if (err) reject(new KeypairError(err.toString()))
                     this.puk = puk;
                     this.prk = prk;
                     resolve();
@@ -73,11 +73,11 @@ class CredentialsHandler{
                     passphrase: 'top secret'
                 }
             }, (err, publicKey, privateKey) => {
-                if (err) reject();
+                if (err) reject(new KeypairError(err.toString()));
                 writeFile("credentials/puk", publicKey, (err: any) => {
-                    if (err) reject();
+                    if (err) reject(new KeypairError(err.toString()));
                     writeFile("credentials/prk", privateKey, (err: any) => {
-                        if (err) reject();
+                        if (err) reject(new KeypairError(err.toString()));
                         this.puk = publicKey;
                         this.prk = privateKey;
                         resolve();
@@ -111,10 +111,11 @@ class CredentialsHandler{
         console.log('Reading token from file...');
         return new Promise((resolve, reject) => {
             readFile("credentials/authenticationData", (err, data) => {
-                if (null !== err || undefined === data){ 
-                    reject()
+                if (null !== err || undefined === data){
+                    reject(new AuthenticationError("Token is missing"))
                     return;
                 }
+                console.log("Got token from file!");
                 resolve(data.toString());
             })
         })
@@ -137,4 +138,4 @@ class CredentialsHandler{
     }
 }
 
-module.exports = CredentialsHandler;
+export { CredentialsHandler };

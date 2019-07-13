@@ -1,33 +1,38 @@
 
-const credentialsHandler = new (require('./src/lib/CredentialsHandler'));
+import { CredentialsHandler } from './src/lib/CredentialsHandler';
 import { authenticate } from './src/lib/Adapter/AuthenticationHandler';
 import { RequestHandler } from './src/lib/Adapter/RequestHandler'
 import { PositionsDalc } from './src/data/PositionsDalc'
+import { AuthenticationError } from './src/data/Exceptions';
 
-credentialsHandler.init()
-    .then(() => credentialsHandler.getToken()
-        .then((token: string) => {
-            console.log('Already logged in!');
-            main(getRequestHeader(token));
-        })
-        .catch(() => 
+async function main(){
+    const requestHandler = new RequestHandler();
+    const credentialsHandler = new CredentialsHandler();
+    const positionsDalc = PositionsDalc.getInstance();
+    let requestHeader = {};
+
+    try{
+        await credentialsHandler.init();
+        const token = await credentialsHandler.getToken();
+        const header = getRequestHeader(token);
+        await requestHandler.checkHeaderValidity(header);
+    } catch (err){
+        if (err instanceof AuthenticationError){
             authenticate(require('./credentials/credentials').identificationNumber)
-                .then((token: string) => {
+                .then(async (token: string) => {
                     if ('' === token) return
                     console.log('Logged in!');
                     credentialsHandler.setToken(Buffer.from(token, 'utf-8'))
-                    main(getRequestHeader(token))
+                    requestHeader = getRequestHeader(token);
+                    const positions = await requestHandler.getAccountPositions(requestHeader);
+                    positionsDalc.insert(positions.data.instrumentPositions);
                 })
-                .catch((err: any) => console.error(err))))
-
-
-
-async function main(requestHeader: object){
-    const requestHandler = new RequestHandler();
-    const positionsDalc = PositionsDalc.getInstance();
+                .catch((err: any) => console.error(err))
+        } else {
+            console.error(err);
+        }
+    }
     
-    const positions = await requestHandler.getAccountPositions(requestHeader);
-    positionsDalc.insert(positions.data.instrumentPositions);
 }
 
 function getRequestHeader(token: string): object{
@@ -35,3 +40,5 @@ function getRequestHeader(token: string): object{
         Cookie: 'csid='+token+';'
     } 
 }
+
+main();

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {ServerError, AuthenticationError} from '../../data/Exceptions';
 const bankIdAuthenticationURL = 'https://www.avanza.se/_api/authentication/sessions/bankid/';
 
 /**
@@ -17,9 +18,9 @@ function getTransactionId(identificationNumber: string): Promise<string> {
             })
             .catch((err: any) => {
                 if (undefined !== err.data)
-                    reject(err.data.message)
+                    reject(new ServerError(err.data.message))
                 else
-                    reject(err)
+                    reject(new ServerError(err))
             });
     })
 }
@@ -47,7 +48,7 @@ function getLoginPath(transactionId: string): Promise<string> {
                 }
             })
             .catch((err: any) => {
-                rejectFun(err)
+                rejectFun(new ServerError(err))
             });
     }
 }
@@ -65,7 +66,7 @@ function getAuthenticationSession(url: string): Promise<string> {
                 resolve(res.data.authenticationSession);
             })
             .catch((err: any) => {
-                reject(err)
+                reject(new AuthenticationError(err))
             });
     })
 }
@@ -83,10 +84,7 @@ async function authenticate(identificationNumber: string): Promise<string>{
         const authenticationSession = await getAuthenticationSession(loginPath);
         return authenticationSession;
     } catch (err) {
-        undefined !== err.response 
-            ? console.error(err.response.data) 
-            : console.error("error");
-        return '';
+        throw err
     }
 }
 

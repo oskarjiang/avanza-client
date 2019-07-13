@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AuthenticationError } from '../../data/Exceptions';
 class RequestHandler{
     private baseUrl = 'https://www.avanza.se';
     private endPoints = {
@@ -13,6 +14,13 @@ class RequestHandler{
     getAccountPositions(requestHeader: object){
         return axios.get(this.baseUrl.concat(this.endPoints.positions), {
             headers: requestHeader
+        })
+    }
+    checkHeaderValidity(requestHeader: object){
+        return new Promise((resolve, reject) => {
+            this.getAccountOverview(requestHeader)
+                .then(() => resolve())
+                .catch(() => reject(new AuthenticationError("Token is invalid")));
         })
     }
 }
