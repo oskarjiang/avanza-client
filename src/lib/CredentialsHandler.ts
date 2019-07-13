@@ -111,10 +111,12 @@ class CredentialsHandler{
         console.log('Reading token from file...');
         return new Promise((resolve, reject) => {
             readFile("credentials/authenticationData", (err, data) => {
-                if (null !== err || undefined === data){ 
+                if (null !== err || undefined === data){
+                    console.error(err)
                     reject()
                     return;
                 }
+                console.log("Got token from file!");
                 resolve(data.toString());
             })
         })
@@ -137,4 +139,4 @@ class CredentialsHandler{
     }
 }
 
-module.exports = CredentialsHandler;
+export { CredentialsHandler };
