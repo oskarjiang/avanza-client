@@ -7,7 +7,7 @@ import { AuthenticationError } from './src/data/Exceptions';
 var http = require('http');
 
 http.createServer(() => {
-    console.log("*** New request!")
+    console.log("*** New request "+new Date(Date.now()).toUTCString())
     main()
 }).listen(8080);
 async function main(){
