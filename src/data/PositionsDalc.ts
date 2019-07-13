@@ -16,9 +16,12 @@ class PositionsDalc{
     insert(positions: any){
         let allPostions: any[] = [];
         positions.map((position: any) => allPostions = allPostions.concat(position.positions));
+        console.log("Connecting to DB..")
         MongoClient.connect(PositionsDalc.address, {useNewUrlParser: true}, function(err: any, db: any) {
             if (err) throw err;
+            console.log("Connected to DB!")
             var dbo = db.db(PositionsDalc.db);
+            console.log("Inserting new data...")
             dbo.collection(PositionsDalc.collection)
                 .insertMany(allPostions, (err: any, res:any) => {if (err) throw err});
             console.log('Inserted new data!')
