@@ -1,6 +1,6 @@
 {
-  "name": "avanza-client",
-  "version": "0.0.1",
+  "name": "avanza-scraper",
+  "version": "0.1.0",
   "description": "PoC for interracting with Avanza API",
   "main": "index.js",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oskarjiang/avanza-client.git"
+    "url": "git+https://github.com/oskarjiang/avanza-scraper.git"
   },
   "author": "Oskar Jiang",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/oskarjiang/avanza-client/issues"
+    "url": "https://github.com/oskarjiang/avanza-scraper/issues"
   },
-  "homepage": "https://github.com/oskarjiang/avanza-client#readme",
+  "homepage": "https://github.com/oskarjiang/avanza-scraper#readme",
   "dependencies": {
     "@types/node": "^12.6.1",
     "axios": "^0.19.0",
