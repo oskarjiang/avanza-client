@@ -3,6 +3,7 @@ import { CredentialsHandler } from './src/lib/CredentialsHandler';
 import { authenticate } from './src/lib/Adapter/AuthenticationHandler';
 import { RequestHandler } from './src/lib/Adapter/RequestHandler'
 import { PositionsDalc } from './src/data/PositionsDalc'
+import { AuthenticationError } from './src/data/Exceptions';
 
 async function main(){
     const requestHandler = new RequestHandler();
@@ -16,17 +17,20 @@ async function main(){
         const header = getRequestHeader(token);
         await requestHandler.checkHeaderValidity(header);
     } catch (err){
-        console.error(err);
-        authenticate(require('./credentials/credentials').identificationNumber)
-            .then(async (token: string) => {
-                if ('' === token) return
-                console.log('Logged in!');
-                credentialsHandler.setToken(Buffer.from(token, 'utf-8'))
-                requestHeader = getRequestHeader(token);
-                const positions = await requestHandler.getAccountPositions(requestHeader);
-                positionsDalc.insert(positions.data.instrumentPositions);
-            })
-            .catch((err: any) => console.error(err))
+        if (err instanceof AuthenticationError){
+            authenticate(require('./credentials/credentials').identificationNumber)
+                .then(async (token: string) => {
+                    if ('' === token) return
+                    console.log('Logged in!');
+                    credentialsHandler.setToken(Buffer.from(token, 'utf-8'))
+                    requestHeader = getRequestHeader(token);
+                    const positions = await requestHandler.getAccountPositions(requestHeader);
+                    positionsDalc.insert(positions.data.instrumentPositions);
+                })
+                .catch((err: any) => console.error(err))
+        } else {
+            console.error(err);
+        }
     }
     
 }
