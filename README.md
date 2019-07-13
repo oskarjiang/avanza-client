@@ -11,9 +11,11 @@ This app supports interraction with Avanza's API. Authentication is supported th
       identificationNumber:"{YOUR_IDENTIFICATIONNUMBER}"
   }
 ```
-4. Execute `npm install` in root folder
-5. Compile *.ts* files using `tsc` command in root folder
-6. Execute `npm start` in root folder
+4. In *src/data/PositionsDalc.ts* change address to the address of the mongodb container in Docker
+4. Run `docker build --tag=avanza-scraper.` in root folder
+5. Run `docker run -d -p 8080:8080 avanza-scraper`
+6. Go to *localhost:8080* to trigger scraping
+7. Check logs for authentication status
 
 ## Requirements
-Typescript installed globally (*npm i -g typescript*)
+Docker installed with mongodb container running `docker run --name mongo -d mongo`
