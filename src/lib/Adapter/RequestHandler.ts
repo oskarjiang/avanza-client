@@ -15,6 +15,13 @@ class RequestHandler{
             headers: requestHeader
         })
     }
+    checkHeaderValidity(requestHeader: object){
+        return new Promise((resolve, reject) => {
+            this.getAccountOverview(requestHeader)
+                .then(() => resolve())
+                .catch(() => reject());
+        })
+    }
 }
 
 export { RequestHandler };
