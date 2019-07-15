@@ -11,7 +11,7 @@ This app supports interraction with Avanza's API. Authentication is supported th
   }
 ```
 3. In *src/data/PositionsDalc.ts* change address to the address of the mongodb container in Docker
-4. Run `docker build --tag=avanza-scraper.` in root folder
+4. Run `docker build --tag=avanza-scraper .` in root folder
 5. Run `docker run -d -p 8080:8080 avanza-scraper`
 
 ## Usage
