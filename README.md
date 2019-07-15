@@ -15,7 +15,7 @@ This app supports interraction with Avanza's API. Authentication is supported th
 5. Run `docker run -d -p 8080:8080 avanza-scraper`
 
 ## Usage
-GET request to *localhost:8080* triggers scraping. Check logs (`docker logs -f {CONTAINER_NAME`) for authentication status
+GET request to *localhost:8080* triggers scraping. Check logs (`docker logs -f {CONTAINER_NAME}`) for authentication status
 
 ## Requirements
 Docker installed with mongodb container running `docker run --name mongo -d mongo`
