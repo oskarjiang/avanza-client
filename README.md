@@ -2,7 +2,7 @@
 This app supports interraction with Avanza's API. Authentication is supported through BankID. Purpose is to scrape the data from the API and store it in a NoSQL database.
 
 ## Installation
-
+### Using Docker
 1. Clone repository
 2. Create folder named *credentials* in project root
 3. Create file named *credentials.ts* in the *credentials* folder with following content:
